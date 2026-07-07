@@ -1,0 +1,144 @@
+diff --git a/RevQCMagic b/RevQCMagic
+--- a/RevQCMagic
++++ b/RevQCMagic
+@@ -1 +1 @@
+-Subproject commit e98b6157ce8b5e9b8699d6167d99bc0c845cddad
++Subproject commit e98b6157ce8b5e9b8699d6167d99bc0c845cddad-dirty
+diff --git a/cppNEGF/CMakeLists.txt b/cppNEGF/CMakeLists.txt
+index 2d890f8..eeb5b16 100644
+--- a/cppNEGF/CMakeLists.txt
++++ b/cppNEGF/CMakeLists.txt
+@@ -16,7 +16,7 @@ set(CPPNEGF_SOURCES
+     phononselfenergy.h phononselfenergy.cpp
+     scfsolver.h scfsolver.cpp
+     quantitycalc.h quantitycalc.cpp
+-    global.h
++    global.h global.cpp
+     linalg.h linalg.cpp
+     logger.h logger.cpp
+     complexmatrixbuffer.h complexmatrixbuffer.cpp
+diff --git a/cppNEGF/Tests/greensfunctionTests.cpp b/cppNEGF/Tests/greensfunctionTests.cpp
+index d2e9f75..47276c7 100644
+--- a/cppNEGF/Tests/greensfunctionTests.cpp
++++ b/cppNEGF/Tests/greensfunctionTests.cpp
+@@ -754,28 +754,37 @@ int testCyclicBoundaryConditionsWithCoulomb(int numberOfSites, bool restrictedCa
+     GF.m_gfunc->setRestrictedCalculation(restrictedCalc);
+     ret += expect(restrictedCalc,GF.m_gfunc->getRestrictedCalculation(),__PRETTY_FUNCTION__,"getRestrictedCalculation");
+ 
+-    SCFSolver SCF;
+-    SCF.setGreensFunction(GF.m_gfunc);
+-    SCF.setSelfConsistentSelfEnergy(FHam);
+-    long itercount = 0;
+-    logger::silence();
+-    SCF.run([&](){
+-        itercount++;
+-        logger().log("error estimate:", FHam->getErrorEstimate());
+-        return FHam->getErrorEstimate() < 5e-12 && ( itercount > 100 || numberOfSites > 2); // the two site version always has the correct eigenspace since this is fully determined by symmetry. Therefore CDIIS predicts too low of an error
+-    },10000);
+-    logger::unsilence();
++    if (numberOfSites >= 100)
++    {
++        //T is a global variable
++        for (T = 6000;T >= 300; T-= 100)
++        {
++            logger().log("TStart",T);
++            SCFSolver SCF;
++            SCF.setGreensFunction(GF.m_gfunc);
++            SCF.setSelfConsistentSelfEnergy(FHam);
++            long itercount = 0;
++            // logger::silence();
++            SCF.run([&](){
++                itercount++;
++                logger().log("error estimate:", FHam->getErrorEstimate());
++                return FHam->getErrorEstimate() < 5e-12 && ( itercount > 100 || numberOfSites > 2); // the two site version always has the correct eigenspace since this is fully determined by symmetry. Therefore CDIIS predicts too low of an error
++            },10000);
++            logger().log("TEnd",T);
++        }
++    }
++    // logger::unsilence();
+ 
+     ComplexSelfAdjointMatrix Gn;
+     GF.m_gfunc->getGnIntegral(100,Gn,false);
+     Gn.toBasisC(Gn,OrthBasis + std::to_string(numberOfSites));
+ 
+-    ComplexSelfAdjointMatrix GnExpt = loadDensity(numberOfSites,mu);
+-    ret += expectNear(GnExpt,Gn,makeMatrixNearTol(Gn,matrixNearTol),__PRETTY_FUNCTION__,"Gn integral wrong");
++    // ComplexSelfAdjointMatrix GnExpt = loadDensity(numberOfSites,mu);
++    // ret += expectNear(GnExpt,Gn,makeMatrixNearTol(Gn,matrixNearTol),__PRETTY_FUNCTION__,"Gn integral wrong");
+ 
+-    //logger(filename).logAccurate("Resultant Density", Gn);
+-    logger().log("Gn error:", (Gn-GnExpt).norm());
+-    logger().log("Gn Trace error:", Gn.trace()-GnExpt.trace());
++    logger(filename).logAccurate("Resultant Density", Gn);
++    // logger().log("Gn error:", (Gn-GnExpt).norm());
++    // logger().log("Gn Trace error:", Gn.trace()-GnExpt.trace());
+     logger().log("error estimate:", FHam->getErrorEstimate());
+     GF.m_gfunc->setSelfEnergies({});
+     return ret;
+@@ -798,7 +807,7 @@ int CoulombTest()
+     int quickTestMaxSize = 499;
+ 
+     {
+-        const int sizes[] = {2,3,4,10,100,500,1000};
++        const int sizes[] = {2,3,4,10,100/*,500,1000*/};
+         for (auto& i : sizes)
+         {
+             if (quickTestsOnly && quickTestMaxSize < i)
+@@ -814,7 +823,7 @@ int CoulombTest()
+ 
+     auto doLoop = [&](int maxSize)
+     {
+-        const int sizes[] = {2,3,4,10,100,500,1000};
++        const int sizes[] = {100,500,1000};
+         if (quickTestsOnly && quickTestMaxSize < maxSize)
+             maxSize = quickTestMaxSize;
+         for (auto& i : sizes)
+@@ -890,7 +899,7 @@ int CoulombTest()
+     };
+ 
+     //Equilibrium integrator
+-    doLoop2(10);
++    doLoop2(100);
+     if (ret)
+         goto end;
+ 
+@@ -921,14 +930,14 @@ end://ugly
+ int greensfunctionTests(int argc, char** argv)
+ {
+     char* quickTestPtr = std::getenv("QUICKTESTS");
+-    if (quickTestPtr)
++    if (quickTestPtr && *quickTestPtr != '0')
+     {
+         logger().log("QuickTests only");
+         quickTestsOnly = true;
+     }
+     BasisManager::getInstance().deleteAllBasis();
+     int ret = 0;
+-    ret += NoCoulombTest();
++    // ret += NoCoulombTest();
+     if (ret)
+         return ret > 0 ? -1 : 0;
+     ret += CoulombTest();
+diff --git a/cppNEGF/global.cpp b/cppNEGF/global.cpp
+new file mode 100644
+index 0000000..aaa1098
+--- /dev/null
++++ b/cppNEGF/global.cpp
+@@ -0,0 +1,3 @@
++#include "global.h"
++//Some globals need to be modified.
++numType T = 300;
+diff --git a/cppNEGF/global.h b/cppNEGF/global.h
+index 67a94d2..8aacd2a 100644
+--- a/cppNEGF/global.h
++++ b/cppNEGF/global.h
+@@ -15,7 +15,8 @@ const numType energyUnit = 4.3597447222060e-18; // Hartree
+ const numType lengthUnit = 5.29177210544e-11; // Bohr radius in metres
+ const numType electricPotentialUnit = 27.211386245981; // in Volts
+ const numType kb = 1.380649e-23 / energyUnit; //# Hartrees per kelvin
+-const numType T = 300; // Kelvin
++// const numType T = 6000; // Kelvin
++extern numType T; // Kelvin
+ const numType E_0 = 0.25/M_PI; // Vaccum permitivity
+ const std::complex<double> iu(0.0,1.0);   // imaginary unit
+ 

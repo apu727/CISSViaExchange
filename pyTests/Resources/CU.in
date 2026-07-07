@@ -1,0 +1,18 @@
+$molecule
+   0 1
+   Cu 0 0 0
+   Cu 0 0 1.5
+$end
+
+$rem
+   JOBTYPE SP
+   EXCHANGE HF
+   BASIS lanl2dz
+   GUI      2
+   TRANS_ENABLE -1
+!   SAVE_AO_INTEGRALS 1
+   SCF_FINAL_PRINT  2
+   PRINT_ORBITALS true
+$end
+
+

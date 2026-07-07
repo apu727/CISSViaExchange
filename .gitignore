@@ -1,0 +1,10 @@
+__pycache__/
+bin/
+cppNEGF.cpython-312-x86_64-linux-gnu.so
+include/
+lib/
+lib64
+pyTests/__pycache__/
+pyvenv.cfg
+share/
+

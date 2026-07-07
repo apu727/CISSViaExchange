@@ -1,0 +1,106 @@
+/home/bc528/fs/Ciss/SOCIntegrals.py:48: UserWarning: Module ZFS is under testing
+  warnings.warn('Module ZFS is under testing')
+Settings:
+Basis: sto-3g
+Charge:0
+Spin:0
+UseHFOrbitals:False
+OrthogonalOrbitals:False
+UsingDualSpace:True
+Qchem?:True
+
+
+Cant load HCORE fchkHCORE may be ordered wrong, Filename:Calculations/CHO_PEX/CHO_CuSmall_PE0.04_Current_10X_X/CHO1eInt.dat
+ECP LANL2DZ not found for  O
+ECP LANL2DZ not found for  C
+ECP LANL2DZ not found for  H
+Creating basis from metric with name: AO
+No optimised geometry found
+Using Standard Nuclear Orientation Geometry
+[QChem Calculations/CHO_PEX/CHO_CuSmall_PE0.04_Current_10X_X/CHO.out ERROR] Encountered error when parsing.
+[QChem Calculations/CHO_PEX/CHO_CuSmall_PE0.04_Current_10X_X/CHO.out ERROR] Last line read:     1  -0.0819397   0.0161704   0.0078990   0.0089291  -0.0372456  -0.0037617
+
+This is a new object and has not had any parent.
+This is a new object and has not had any parent.
+This is a new object and has not had any parent.
+This is an existing object. Changing parent...
+This is a new object and has not had any parent.
+This is an existing object. Changing parent...
+This is a new object and has not had any parent.
+Traceback (most recent call last):
+  File "/mnt/raid0/fastscratch/bc528/Ciss/Calculations/CHO_PEX/CHO_CuSmall_PE0.04_Current_10X_X/CHO_CuSmall_EQ.py", line 84, in <module>
+    GF.runHamGen()
+  File "/home/bc528/fs/Ciss/hartree_fock.py", line 447, in runHamGen
+    self.load()
+  File "/home/bc528/fs/Ciss/hartree_fock.py", line 210, in load
+    permutationMatrix,cbs,state = computeQChemToPyscfPermutation(self.params.outputName,fchkParams) # P^{i}_{j} = c'^i c_j where c'^i is in the pyscf basis, c_j is in the qchem basis. A normal vector is c^j\ket{e_j} so this works as expected
+                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bc528/fs/Ciss/loadQChemOutput.py", line 246, in computeQChemToPyscfPermutation
+    config, state = qchem_output_to_configuration_state(outputName+".out",0.0)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bc528/fs/Ciss/qcmagic/interfaces/converters/qchem.py", line 332, in qchem_output_to_configuration_state
+    config, states_list = qchem_output_to_configuration_states(output, energy_check_threshold)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bc528/fs/Ciss/qcmagic/interfaces/converters/qchem.py", line 193, in qchem_output_to_configuration_states
+    atom = Atom(symbol, coordsystem, Vector3D(coords)*scale)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bc528/fs/Ciss/qcmagic/core/cspace/molecule/atom.py", line 61, in __init__
+    self._element = element(ids)
+                    ^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/mendeleev/mendeleev.py", line 66, in element
+    return _get_element(ids)
+           ^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/mendeleev/mendeleev.py", line 84, in _get_element
+    return session.query(Element).filter(Element.symbol == str(ids)).one()
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/query.py", line 2808, in one
+    return self._iter().one()  # type: ignore
+           ^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/engine/result.py", line 1815, in one
+    return self._only_one_row(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/engine/result.py", line 757, in _only_one_row
+    row: Optional[_InterimRowType[Any]] = onerow(hard_close=True)
+                                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/engine/result.py", line 1678, in _fetchone_impl
+    return self._real_result._fetchone_impl(hard_close=hard_close)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/engine/result.py", line 2264, in _fetchone_impl
+    row = next(self.iterator, _NO_ROW)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 223, in chunks
+    rows = [proc(row) for row in fetch]
+            ^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 1145, in _instance
+    _populate_full(
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 1353, in _populate_full
+    populator(state, dict_, row)
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 2070, in load_collection_from_subq
+    collection = collections.get(tuple_getter(row), ())
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1803, in get
+    self._load()
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 1819, in _load
+    rows = list(q.params(self.params))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/query.py", line 2845, in __iter__
+    yield from result  # type: ignore
+    ^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/engine/result.py", line 512, in iterrows
+    for raw_row in self._fetchiter_impl():
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 226, in chunks
+    tuple([proc(row) for proc in process]) for row in fetch
+           ^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 1145, in _instance
+    _populate_full(
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 1353, in _populate_full
+    populator(state, dict_, row)
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/strategies.py", line 2905, in load_scalar_from_joined_new_row
+    dict_[key] = _instance(row)
+                 ^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 1202, in _instance
+    to_load = _populate_partial(
+              ^^^^^^^^^^^^^^^^^^
+  File "/mnt/raid0/fastscratch/bc528/Ciss/lib/python3.12/site-packages/sqlalchemy/orm/loading.py", line 1414, in _populate_partial
+    populator(state, dict_, row)
+KeyboardInterrupt
