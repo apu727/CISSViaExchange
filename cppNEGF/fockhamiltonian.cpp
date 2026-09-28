@@ -204,7 +204,7 @@ void FockHamiltonian<SelfEnergyMatrixType>::DDIISStep(ComplexDualSelfAdjointMatr
 
     m_Gn.toBasisC(MGn,m_notProjectedBasis);
     currEVec = Gn/(Gn.trace()) - MGn/(MGn.trace());
-    //currEVec = Gn - MGn;
+    // currEVec = Gn - MGn;
 
     m_errorEstimate = currEVec.norm();
     // //Remove this to reenable

@@ -18,7 +18,7 @@ def getSpinorVersionBAD(Mat):
 def getSpinorVersion(Mat):
     return Mat.toBasisCast(type(Mat)(),BasisManager.removeSpinTags(Mat.getBasis()))
 
-def generateIntegrals(atomString,basis,isECP,Generate2eInts, BreitIntegrals = False, atomicCharges = None, namedBasis = "AO"):
+def generateIntegrals(atomString,basis,isECP,Generate2eInts, BreitIntegrals = False, atomicCharges = None, namedBasis = "AO", spinLambda = 1):
 
     mol = gto.Mole()
     mol.atom = atomString
@@ -88,6 +88,7 @@ def generateIntegrals(atomString,basis,isECP,Generate2eInts, BreitIntegrals = Fa
     #     return 2*J-K
     #For SPINDENSITY
     def makejk(dm):
+        print(f"DM is RHF?:{dm.getSpinSym() == SpinSymmetry.RHF}")
         if dm.getSpinSym() == SpinSymmetry.RHF:
             dmaa = dm.toBasis(ComplexDualSelfAdjointMatrix(),namedBasis + BasisManager.Alpha_Block).toNumpy()
             j1, k1 = scf.hf.get_jk(mol, dmaa,hermi=0)
@@ -105,16 +106,34 @@ def generateIntegrals(atomString,basis,isECP,Generate2eInts, BreitIntegrals = Fa
             # dmab = dm[:nao,nao:]
             # dmbb = dm[nao:,nao:]
             # dmba = dm[nao:,:nao]
+
             dmaa = dm.toBasis(ComplexDualMatrix(),namedBasis + BasisManager.Alpha_Block).toNumpy()
             dmab = dm.toBasis(ComplexDualMatrix(),[namedBasis + BasisManager.Alpha_Block,namedBasis + BasisManager.Beta_Block]).toNumpy()
             dmbb = dm.toBasis(ComplexDualMatrix(),namedBasis + BasisManager.Beta_Block).toNumpy()
             dmba = dm.toBasis(ComplexDualMatrix(),[namedBasis + BasisManager.Beta_Block,namedBasis + BasisManager.Alpha_Block]).toNumpy()
-
             
             dms = np.stack((dmaa, dmbb, dmab, dmba))
             
             j1, k1 = scf.hf.get_jk(mol, dms,hermi=0)
+            print(f"spinLambda:{spinLambda}")
+            if spinLambda != 1:
+                #Rescale the Non identity spin parts by spinLambda. 
+                # i.e. 
+                # [KAA,KAB] =  [KAA/2+KBB/2,0] +  Lambda [KAA/2-KBB/2,KAB         ] = KI/2 + Lambda [KZ/2.   ,KX/2-iKY/2]
+                # [KBA,KBB]    [0,KAA/2+KBB/2]           [KBA.       , KBB/2-KAA/2]                 [KX/2+iKY/2, -KZ/2  ]
+                KI = k1[0] + k1[1]
+                # KX = k1[2] + k1[3]
+                # KY = 1j*(k1[2] -k1[3])
+                KZ = k1[0] - k1[1]
 
+                
+
+                k1[0] = KI/2 + KZ*(spinLambda/2)
+                k1[1] = KI/2 - KZ*(spinLambda/2)
+                k1[2] *= spinLambda
+                k1[3] *= spinLambda
+
+                
             # vj = vk = None
             # vj = np.zeros((nso,nso), dm.dtype)
             # vj[:nao,:nao] = vj[nao:,nao:] = j1[0] + j1[1]

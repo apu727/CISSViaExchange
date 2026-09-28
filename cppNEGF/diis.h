@@ -145,10 +145,21 @@ public:
 
             simpleNewtonRaphson(HessianFunc,GradFunc,ErrorFunc,point,true);
             CoeffVec = point.cwiseProduct(point)/(point.squaredNorm());
-            logger().logAccurate("CoeffVec Normalisation", CoeffVec.sum());
             Eigen::VectorXd logVector = CoeffVec.array().log();
-            logger().log("CoeffVecEntropy", -CoeffVec.cwiseProduct(logVector).sum());
-            logger().log("MaxEntropy", log(currDIISSize) );
+            double entropy = -CoeffVec.cwiseProduct(logVector).sum();
+            if (entropy < 1e-10)
+            {
+                logger().log("Forward progress mitigation, entropy",entropy);
+                CoeffVec.setZero();
+                CoeffVec(currDIISSize-1) = 1;
+            }
+            else
+            {
+                logger().logAccurate("CoeffVec Normalisation", CoeffVec.sum());
+                logger().log("CoeffVecEntropy", entropy);
+                logger().log("MaxEntropy", log(currDIISSize) );
+            }
+            
 
         }
         else

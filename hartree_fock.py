@@ -88,6 +88,7 @@ class GreensFunctionMethodParameters:
     doPhotoElectronSCF = False
 
     doSOC = False
+    spinLambda = 1 #Rescale the non spin symmetric part of the exchange matrix by this factor. 
     # SOCScaleFactor = 1# Multiplies the SOC contribution by a scale factor. This is plain wrong but can give useful results. Now in PyscfInterface
 
     computeEnergy = None 
@@ -210,7 +211,7 @@ class GreensFunctionMethod:
             atomString = generatePyscfAtomString(fchkParams)        
         else:
             atomString = self.params.atomString
-        hcore,eri,nuclearEnergy,S_AO,hecp,makeJK,hSOC = generateIntegrals(atomString,fchkParams["Basis"],isECP,Generate2eInts=Generate2eInts,BreitIntegrals=self.params.doSOC,atomicCharges=fchkParams["AtomicNumbers"],namedBasis="AO")
+        hcore,eri,nuclearEnergy,S_AO,hecp,makeJK,hSOC = generateIntegrals(atomString,fchkParams["Basis"],isECP,Generate2eInts=Generate2eInts,BreitIntegrals=self.params.doSOC,atomicCharges=fchkParams["AtomicNumbers"],namedBasis="AO",spinLambda=self.params.spinLambda)
         S_AO.asMetric()
         if isECP:
             hcore += hecp

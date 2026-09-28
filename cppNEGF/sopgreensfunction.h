@@ -15,7 +15,7 @@ class SOPGreensFunction
 
 
 
-    const enums::SpinSymmetry m_spinSym = enums::SpinSymmetry::RHF; // always start with RHF, this is then degraded by other matrices that are added
+    mutable enums::SpinSymmetry m_spinSym = enums::SpinSymmetry::RHF; // always start with RHF, this is then degraded by other matrices that are added. Set after cache is built
     indexBasisT m_basis = {"",""};
     // indexBasisT m_desiredBasis = {"",""};
     numType m_mu = 0; // Only use if this is not determinable from the self energies.

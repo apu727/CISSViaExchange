@@ -67,10 +67,10 @@ params.doSOC = False
 
 params.computeEnergy = False if params.doSOC else True
 params.SCFRead = True # Reads a finalDensity file if it can find one
-params.CDIISInitialAlpha = 1 # default 0.3
+params.CDIISInitialAlpha = 0.3 # default 0.3
 params.doSCF = True # Actually do SCF or just use the loaded density. Usually you want to use SCF
 params.doRestrictedCalc = False
-params.SCFConvergence = 7.1 # Same as QCHEM, Converged when trace changes by less than 10**-SCFConvergence
+params.SCFConvergence = 5.3 # Same as QCHEM, Converged when trace changes by less than 10**-SCFConvergence
 params.doAintegral = False
 params.doGnIntegral = True
 

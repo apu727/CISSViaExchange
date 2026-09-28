@@ -104,6 +104,8 @@ void SOPGreensFunction::buildCache() const
             }
             if (m_enforcedSpinSym == GreensFunction::EnforcedSpinSymmetryType::RHF)
                 EI.setSpinSym(enums::SpinSymmetry::RHF);
+            logger().log("EI spin Sym is RHF",EI.getSpinSym() == enums::SpinSymmetry::RHF);
+            m_spinSym = EI.getSpinSym();
             if (m_forceSelfAdjointSelfEnergy)
             {
                 ComplexSelfAdjointMatrix EiSA = static_cast<ComplexSelfAdjointMatrix>(EI);
@@ -841,6 +843,7 @@ void SOPGreensFunction::IntegrateAnalyticNonEquilibriumGn(ComplexMatrix &dest, b
     }
     if (!isProjectionBasis)
         dest.makeSelfAdjoint();
+    logger().log("(E)GN spin Sym is RHF",dest.getSpinSym() == enums::SpinSymmetry::RHF);
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration1 = std::chrono::duration_cast<std::chrono::microseconds>(stop - start1);
