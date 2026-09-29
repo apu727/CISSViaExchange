@@ -42,7 +42,7 @@ params.ScatteringBandBottom = 0 # AKA vaccum level
 params.ScatteringElementCouple = [8,6,1]
 params.ScatteringSpin = np.array([0.04687, 0.13027, 0.99037])*1e-8
 params.ScatteringMu = params.ScatteringBandBottom-1
-params.useEDIIS = True
+params.useEDIIS = False
 
 
 
@@ -70,7 +70,7 @@ params.SCFRead = True # Reads a finalDensity file if it can find one
 # params.CDIISInitialAlpha = 1 # default 0.3
 params.doSCF = True # Actually do SCF or just use the loaded density. Usually you want to use SCF
 params.doRestrictedCalc = False
-params.SCFConvergence = 9.301029996 # Same as QCHEM, 10**-SCFConvergence
+params.SCFConvergence = 8 # Same as QCHEM, 10**-SCFConvergence
 params.doAintegral = False
 params.doGnIntegral = True
 
