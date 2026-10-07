@@ -1,0 +1,6 @@
+Sweep up and down. Lambda0 starts from RHF initial guess, CHO_CuSmall_0_EQ
+Do EDIIS until converged better than 1e-5. Then do CDIIS until better than 1e-8. 
+Non D folders are on the up sweep, D folders on the down sweep.
+
+The PE0.01, 0.001, 0.0 are all run from the PE0.04_Lambda1 converged result 
+CHO_CuSmall_PE0.04_Current_Z_Lambda1_FrozL0Density Applied Lambda = 1 to the Lambda = 0 converged density without doing SCF. 
