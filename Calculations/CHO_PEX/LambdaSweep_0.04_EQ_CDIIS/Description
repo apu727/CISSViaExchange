@@ -1,0 +1,6 @@
+CHO_CuSmall_PE0.04_EQ started with the 0_EQ RHF initial guess and used CDIIS until it converged. never EDIIS.
+Do CDIIS until converged better than 1e-3. Then do CDIIS until better than 1e-5. 
+Sweep down then up. Lambda1 starts from 0.04_EQ initial guess, CHO_CuSmall_PE0.04_EQ
+Do CDIIS until converged better than 1e-5. Then do CDIIS until better than 1e-8. 
+Non D folders are on the up sweep, D folders on the down sweep.
+
