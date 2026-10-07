@@ -1,0 +1,11 @@
+CHO_CuSmall_PE0.04_EQ starts from RHF initial guess
+Do EDIIS until converged better than 1e-3. Then do CDIIS until better than 1e-5. 
+Sweep down then up. Lambda1 starts from 0.04_EQ initial guess, CHO_CuSmall_PE0.04_EQ
+Do EDIIS until converged better than 1e-5. Then do CDIIS until better than 1e-8. 
+Non D folders are on the up sweep, D folders on the down sweep.
+
+CHO_CuSmall_PE0.04_EQ2 is using the converged density from Lambda1D. This fell back to the same place as CHO_CuSmall_PE0.04_EQ
+CHO_CuSmall_PE0.04_EQ3 started with the 0_EQ RHF initial guess and used CDIIS until it converged. never EDIIS.
+
+CHO_CuSmall_PE0.01_Current_Z_Lambda1D and CHO_CuSmall_PE0.001_Current_Z_Lambda1D start from the converged result of CHO_CuSmall_PE0.04_EQ as this gave the best electron num + energy
+CHO_CuSmall_PE0.04_Current_Z_Lambda1D_Flipped starts from the spin-flipped density of CHO_CuSmall_PE0.01_Current_Z_Lambda1D
